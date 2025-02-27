@@ -34,7 +34,7 @@ export const ReportPDFSnippet = async (debug: Debugger) => {
 			key,
 			{
 				semester: '2',
-				year: '2566',
+				year: '2567',
 			},
 			{
 				all: clubEMap,

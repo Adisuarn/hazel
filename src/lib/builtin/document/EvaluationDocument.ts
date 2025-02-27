@@ -8,6 +8,8 @@ import type { EvaluateType, IEvaluateResult } from '../types/Evaluate'
 import type { IUserData } from '../types/UserData'
 import type { DocumentTemplate } from './DocumentTemplate'
 
+const pdf = require('pdf-node')
+
 interface IClubMemberData {
   all: DMap<string, IEvaluateResult>
   passed: EvaluateType[] | undefined
@@ -16,7 +18,6 @@ interface IClubMemberData {
   resign: EvaluateType[] | undefined
 }
 
-const pdf = require('pdf-node')
 
 /**
  * @category Built-in

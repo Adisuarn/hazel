@@ -7,14 +7,9 @@ import { ReportLogsSnippet } from 'snippets/reportLogs'
 import { ClearPanelSnippet } from 'snippets/clear'
 import { CheckAuditionSnippet } from 'snippets/checkAudition'
 import { TeacherListsSnippet } from 'snippets/teacherList'
-import { TempBruhSnippets } from 'snippets/temp'
-import { checkStdInClubSeperatelySnippet } from 'snippets/checkStdInClubSeperately'
-import { getStdInAllClubsSnippet } from 'snippets/getStdInAllClubs'
-
-enum RunOption {
-    DEV = 'DEV',
-    PROD = 'PROD',
-}
+import { CheckEvalSnippet } from 'snippets/checkEvalList'
+import { CheckEvalFailSnippet } from 'snippets/checkEvalFail'
+import { CheckEvalFailNbreakSnippet } from 'snippets/checkEvalResignNbreak'
 
 enum SnippetMode {
     REPORTEXCEL = 1,
@@ -25,9 +20,9 @@ enum SnippetMode {
     CLEARPANEL = 6,
     AUDITION = 7,
     TEACHER_LIST = 8,
-    TEMP = 9,
-    CHECK_STD_IN_CLUB_SEPERATELY = 10,
-    GET_STD_IN_ALL_CLUBS = 11,
+    CHECK_EVAL = 9,
+    CHECK_EVAL_FAIL = 10,
+    CHECK_EVAL_FAIL_NBREAK = 11
 }
 
 class Hazel {
@@ -39,60 +34,62 @@ class Hazel {
             input: process.stdin,
             output: process.stdout
         })
-        readline.question(`Enter the runtime: `, (runtimetype: RunOption) => {
-            if (runtimetype !== RunOption.DEV && runtimetype !== RunOption.PROD) {
-                console.error('Invalid runtime')
+
+        console.log('\nAvailable modes:')
+        Object.entries(SnippetMode)
+            .filter(([key]) => isNaN(Number(key)))
+            .forEach(([key, value]) => {
+                console.log(`${value}: ${key}`)
+            })
+        console.log('')
+
+        readline.question(`Enter the mode: `, (modetype: any) => {
+            modetype = parseInt(modetype)
+            if (!Object.values(SnippetMode).includes(modetype)) {
+                console.error('Invalid mode')
                 readline.close()
                 return
             }
-            readline.question(`Enter the mode: `, (modetype: any) => {
-                modetype = parseInt(modetype)
-                if (!Object.values(SnippetMode).includes(modetype)) {
-                    console.error('Invalid mode')
-                    readline.close()
-                    return
-                }
-                const runtime: Runtime = new Runtime(runtimetype)
-                switch (modetype) {
-                    case SnippetMode.REPORTEXCEL:
-                        runtime.runSnippet(ReportExcelSnippet)
-                        break
-                    case SnippetMode.STUDENTINFO:
-                        runtime.runSnippet(StudentInfoSnippet)
-                        break
-                    case SnippetMode.CLUBSLISTS:
-                        runtime.runSnippet(ClubsListsSnippet)
-                        break
-                    case SnippetMode.REPORTPDF:
-                        runtime.runSnippet(ReportPDFSnippet)
-                        break
-                    case SnippetMode.REPORTLOGS:
-                        runtime.runSnippet(ReportLogsSnippet)
-                        break
-                    case SnippetMode.CLEARPANEL:
-                        runtime.runSnippet(ClearPanelSnippet)
-                        break
-                    case SnippetMode.AUDITION:
-                        runtime.runSnippet(CheckAuditionSnippet)
-                        break
-                    case SnippetMode.TEACHER_LIST:
-                        runtime.runSnippet(TeacherListsSnippet)
-                        break
-                    case SnippetMode.TEMP:
-                        runtime.runSnippet(TempBruhSnippets)
-                        break
-                    case SnippetMode.CHECK_STD_IN_CLUB_SEPERATELY: // Need to Fix : Filter teacher out
-                        runtime.runSnippet(checkStdInClubSeperatelySnippet)
-                        break
-                    case SnippetMode.GET_STD_IN_ALL_CLUBS:
-                        runtime.runSnippet(getStdInAllClubsSnippet)
-                        break
-                    default:
-                        console.log('Invalid mode')
-                        break
-                }
-                readline.close()
-            })
+            const runtime: Runtime = new Runtime("PROD")
+            switch (modetype) {
+                case SnippetMode.REPORTEXCEL:
+                    runtime.runSnippet(ReportExcelSnippet)
+                    break
+                case SnippetMode.STUDENTINFO:
+                    runtime.runSnippet(StudentInfoSnippet)
+                    break
+                case SnippetMode.CLUBSLISTS:
+                    runtime.runSnippet(ClubsListsSnippet)
+                    break
+                case SnippetMode.REPORTPDF:
+                    runtime.runSnippet(ReportPDFSnippet)
+                    break
+                case SnippetMode.REPORTLOGS:
+                    runtime.runSnippet(ReportLogsSnippet)
+                    break
+                case SnippetMode.CLEARPANEL:
+                    runtime.runSnippet(ClearPanelSnippet)
+                    break
+                case SnippetMode.AUDITION:
+                    runtime.runSnippet(CheckAuditionSnippet)
+                    break
+                case SnippetMode.TEACHER_LIST:
+                    runtime.runSnippet(TeacherListsSnippet)
+                    break
+                case SnippetMode.CHECK_EVAL:
+                    runtime.runSnippet(CheckEvalSnippet)
+                    break
+                case SnippetMode.CHECK_EVAL_FAIL:
+                    runtime.runSnippet(CheckEvalFailSnippet)
+                    break
+                case SnippetMode.CHECK_EVAL_FAIL_NBREAK:
+                    runtime.runSnippet(CheckEvalFailNbreakSnippet)
+                    break
+                default:
+                    console.log('Invalid mode')
+                    break
+            }
+            readline.close()
         })
         readline.on('close', () => {
             console.log('Closed')
