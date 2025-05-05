@@ -86,8 +86,8 @@ export const resetNewSemesterClub = async (debug: Debugger) => {
 
   })
 
-  const clubChangeList = DMapUtil.buildChanges(clubData, 'club')
-  const userChangeList = DMapUtil.buildChanges(userData, 'user')
+  const clubChangeList = DMapUtil.buildChanges(clubData)
+  const userChangeList = DMapUtil.buildChanges(userData)
   // Push changes to Firestore
 
   new FirestoreCollection('clubs').pushChanges(clubChangeList)
