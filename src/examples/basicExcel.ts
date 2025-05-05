@@ -1,6 +1,5 @@
-import type { Debugger, EvaluateCollectionType, UserDataCollectionType } from '@lib'
-import { ClubRecord, DMap, FirestoreCollection, Mutators } from '@lib'
-
+import type { Debugger, EvaluateCollectionType } from '../lib'
+import { ClubRecord, DMap, FirestoreCollection } from '../lib'
 import { Workbook } from '../lib/builtin/data/Workbook'
 import { Worksheet } from '../lib/builtin/data/Worksheet'
 
@@ -13,17 +12,10 @@ export const basicExcel = async (debug: Debugger) => {
 
   // Initialise data collection
   const evalColl = new FirestoreCollection<EvaluateCollectionType>('evaluate')
-  const users = new FirestoreCollection<UserDataCollectionType>(
-    'data'
-  ).setDefaultMutator(
-    Mutators.SpecificKeyFieldKVMutator((doc) => doc.get('student_id'))
-  )
 
   // Load data from the local cache and fetch if there was no cache.
   const evalData = await evalColl.readFromCache(true)
-  if (!evalData) {
-    return
-  }
+  if (!evalData) return
 
   const evalRecords = new ClubRecord(evalData.getRecord())
 

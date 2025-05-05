@@ -20,7 +20,7 @@ async function fetchClubData(): Promise<Data[]> {
 
 	return evalRecords.map((clubId, v) => ({
 		id: IDUtil.applyOverriddenLayer(clubId),
-        name: v.get('title'),
+    name: v.get('title'),
 		audition: v.get('audition'),
 		place: v.get('place'),
 		committee: v.get('committees')?.toString(),

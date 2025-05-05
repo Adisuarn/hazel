@@ -1,80 +1,36 @@
-import {
-  ClubRecord,
-  DMap,
-  FirestoreCollection,
-  IDUtil,
-  Mutators
-} from '@lib'
-import type {
-  Debugger,
-  EvaluateCollectionType,
-  UserDataCollectionType
-} from '@lib'
+import type { Debugger, EvaluateCollectionType } from '../lib'
+import { ClubRecord, DMap, FirestoreCollection, ID } from '../lib'
 
-import { Workbook } from '../lib/builtin/data/Workbook'
-import { Worksheet } from '../lib/builtin/data/Worksheet'
+export const basicExampleSnippet = async (debug: Debugger) => {
+  /*
+  This example demonstrates the basic usages of lab resources.
+  By utilising Resource Control Class ex. Collection()
+  and Data Controls ex. ClubRecord() and DMap()
+   */
 
-export const HazelSnippet = async (debug: Debugger) => {
-  const evalCol = new FirestoreCollection<EvaluateCollectionType>('evaluate')
-  const users = new FirestoreCollection<UserDataCollectionType>(
-    'data'
-  ).setDefaultMutator(
-    Mutators.SpecificKeyFieldKVMutator((doc) => doc.get('student_id'))
-  )
-  
-  const [evalData, userData] = await Promise.all([evalCol.readFromCache(true), users.readFromCache(true)])
-  
-  if (!evalData || !userData) {
-    return
-  }
+  // Initialise data collection
+  const evalColl = new FirestoreCollection<EvaluateCollectionType>('evaluate')
+
+  // Load data from the local cache and fetch if there was no cache.
+  const evalData = await evalColl.readFromCache(true)
+  if (!evalData) return
 
   const evalRecords = new ClubRecord(evalData.getRecord())
 
-  const books = evalRecords.map((clubId, val) => {
-    const sheetData = new DMap(val.data()).map((key, val) => {
-      let student = userData.findValues(
-        (userDataItem) => userDataItem.get('student_id') === `${key}`
-      )
+  // Compare keys with systemClubs using keyDiff() method.
+  const missing = ID.systemClubs.keyDiff(evalRecords.keys())
+  debug.dump(missing)
 
-      const studentInfo = {
-        title: student[0]?.get('title'),
-        firstname: student[0]?.get('firstname'),
-        lastname: student[0]?.get('lastname'),
-        number: student[0]?.get('number'),
-        room: student[0]?.get('room')
-      }
+  // Merge all sub clubs to main clubs.
+  const mainClubRecords = evalRecords.transformToMainClubs()
 
-      return {
-        ID: key,
-        clubid: clubId,
-        clubs: IDUtil.translateToClubName(clubId),
-        ...studentInfo,
-        report: val.action
-      }
-    })
+  /*
+  Accessing a key using get() method
+  Note: get() method arg should be suggested by the editor (In this case is clubID).
+   */
+  const clubEvalData = mainClubRecords.get('ก30901')
+  if (!clubEvalData) return
 
-    return new Worksheet(sheetData).setName(clubId)
-  })
-
-  const workbook = new Workbook(books)
-
-  workbook.setStyle((l, cell) => {
-    cell.border = {
-      top: { style: 'thin' },
-      left: { style: 'thin' },
-      bottom: { style: 'thin' },
-      right: { style: 'thin' }
-    }
-
-    if (l.r === 1) {
-      cell.font = { bold: true }
-      cell.alignment = { horizontal: 'center' }
-    }
-
-    if (l.c === 2) {
-      cell.alignment = { horizontal: 'center' }
-    }
-  })
-
-  workbook.save('evals.xlsx')
+  // Encapsulate the record with DMap and access its utility methods.
+  debug.dump(new DMap(clubEvalData).size())
 }

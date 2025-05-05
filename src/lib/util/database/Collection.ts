@@ -117,7 +117,10 @@ export abstract class Collection<T extends DataType, M = any, C = any> {
     refMap.iterateSync((k, v) => {
       const id = v._docID
       delete v._docID
-      nMap[k] = new ReferableMapEntity<G>(v, id)
+
+      const entity = new ReferableMapEntity<G>(v, id)
+      entity.setSynthesized(false)
+      nMap[k] = entity
     })
 
     return nMap
@@ -159,7 +162,7 @@ export abstract class Collection<T extends DataType, M = any, C = any> {
         }`
       )
       if (!autoFetch) return null
-      return new LiveDMap(this.makeReferableEntities(this.fetch()))
+      return await this.fetch()
     }
 
     return new DMap(this.makeReferableEntities(data.content))
@@ -181,10 +184,10 @@ export abstract class Collection<T extends DataType, M = any, C = any> {
         }`
       )
       if (!autoFetch) return null
-      return this.fetchNoRef()
+      return await this.fetchNoRef()
     }
 
-    return new DMap(data.content)
+    return new DMap(this.clearEntityReference(data.content))
   }
 
   /**
@@ -204,6 +207,23 @@ export abstract class Collection<T extends DataType, M = any, C = any> {
 
     Files.writeFile(mutator(data), this.resourcePath)
 
-    return new LiveDMap(mutated)
+    return new LiveDMap(this.clearEntityReference(mutated))
+  }
+
+  /**
+   * The **makeReferableEntities()** method converts fetched data to {@link ReferableMapEntity}.
+   * @param data - Fetched data
+   */
+  protected clearEntityReference<G extends DataType>(
+    data: G
+  ): Record<string, G[keyof G]> {
+    const clearedMap = new DMap<string, G[keyof G]>(data)
+    clearedMap.iterateSync((k, v) => {
+      if (v._docID) {
+        delete v._docID
+      }
+    })
+
+    return clearedMap.getRecord()
   }
 }

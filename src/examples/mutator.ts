@@ -1,5 +1,5 @@
-import type { Debugger, UserDataCollectionType } from '@lib'
-import { FirestoreCollection, IDUtil, Mutators } from '@lib'
+import type { Debugger, UserDataCollectionType } from '../lib'
+import { FirestoreCollection, IDUtil, Mutators } from '../lib'
 
 const mutatorExampleSnippet = async (debug: Debugger) => {
   /*
@@ -16,9 +16,7 @@ const mutatorExampleSnippet = async (debug: Debugger) => {
 
   // Load data from the local cache and fetch if there was no cache.
   const userData = await users.readFromCache(true)
-  if (!userData) {
-    return
-  }
+  if (!userData) return
 
   // Find every student that their room property is 59.
   let students = userData.findValues((v) => v.get('room') === '59')

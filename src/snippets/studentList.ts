@@ -35,7 +35,7 @@ export default async function getStudentsInfo(studentData : DMap<string, Referab
     if (studentData === null) return "No data found"
     for(let i in studentData) {
 		const student = studentData.get(i)
-        console.log(student.get('student_id'))
+        console.log(student?.get('student_id'))
     }
 }
 

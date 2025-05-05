@@ -1,7 +1,7 @@
 import type { Ora } from 'ora'
 import ora from 'ora'
 import rsync from 'readline-sync'
-import readline from 'readline'
+
 import { NumberUtil } from '../Number'
 import { ConsoleColour } from './Colour'
 

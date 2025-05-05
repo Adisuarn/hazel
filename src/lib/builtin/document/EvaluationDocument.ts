@@ -8,8 +8,6 @@ import type { EvaluateType, IEvaluateResult } from '../types/Evaluate'
 import type { IUserData } from '../types/UserData'
 import type { DocumentTemplate } from './DocumentTemplate'
 
-const pdf = require('pdf-node')
-
 interface IClubMemberData {
   all: DMap<string, IEvaluateResult>
   passed: EvaluateType[] | undefined
@@ -18,6 +16,7 @@ interface IClubMemberData {
   resign: EvaluateType[] | undefined
 }
 
+const pdf = require('pdf-node')
 
 /**
  * @category Built-in
@@ -49,7 +48,7 @@ export class EvaluationDocument {
       clubId: IDUtil.applyOverriddenLayer(this.clubID),
       sem: this.docInfo.semester,
       year: this.docInfo.year,
-      count: this.clubMemberData.all.size() - 1, // TODO: Debug
+      count: this.clubMemberData.all.size(),
       pass: (this.clubMemberData.passed?.length || 0).toString(),
       failed: (this.clubMemberData.failed?.length || 0).toString(),
       exc: (
@@ -160,7 +159,7 @@ export class EvaluationDocument {
     failed = this.fillBlank(failed)
     exc = this.fillBlank(exc)
 
-    const slicedExc = this.sliceToPrintableChunk(exc, 10)
+    const slicedExc = this.sliceToPrintableChunk(exc, 6)
     let excd: any[][]
     if (slicedExc.length > 1) {
       excd = slicedExc.slice(0, slicedExc.length - 1)
