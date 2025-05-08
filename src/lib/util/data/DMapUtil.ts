@@ -32,9 +32,10 @@ export class DMapUtil {
     data:
       | DMap<string, ReferableMapEntity<any>>
       | LiveDMap<string, ReferableMapEntity<any>>
-      | ReferableMapEntity<any>[]
+      | ReferableMapEntity<any>[],
+    name?: string
   ): ChangeList {
-    const fname = `${new Date().getTime()}.json`
+    const fname = `${new Date().getTime()+"-"+name}.json`
     this.debug.info(`generating review file ${fname}`)
 
     let changes

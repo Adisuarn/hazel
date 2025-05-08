@@ -1,7 +1,10 @@
+import * as dotenv from 'dotenv'
 import admin, { firestore } from 'firebase-admin'
 
 import { Database } from '../../util/database/Database'
 import Firestore = firestore.Firestore
+
+dotenv.config()
 
 /**
  * @category Built-in

@@ -11,6 +11,7 @@ import { resetNewSemesterClub } from 'snippets/new_semester/reset_new_semester_c
 import { checkCommittees } from 'snippets/new_semester/check_committees'
 import { checkMemberPercentage } from 'snippets/new_semester/member_percentage'
 import { EvalExcelGenSnippet } from 'snippets/evalGen'
+import { oldMemberPercentage } from 'snippets/new_semester/old_member_percentage'
 
 enum SnippetMode {
     REPORTEXCEL = 1,
@@ -26,6 +27,7 @@ enum SnippetMode {
     CHECK_COMMITTEES = 11,
     CHECK_MEMBER_PERCENTAGE = 12,
     PLAYGROUND = 13,
+    OLD_MEMBER_PERCENTAGE = 14,
 }
 
 class Hazel {
@@ -90,6 +92,9 @@ class Hazel {
                     break
                 case SnippetMode.CHECK_MEMBER_PERCENTAGE:
                     runtime.runSnippet(checkMemberPercentage)
+                    break
+                case SnippetMode.OLD_MEMBER_PERCENTAGE:
+                    runtime.runSnippet(oldMemberPercentage)
                     break
                 default:
                     console.log('Invalid mode')
