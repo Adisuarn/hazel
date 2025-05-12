@@ -20,6 +20,9 @@ export type {
   UserDataCollectionType
 } from './builtin/types/UserData'
 export type { UserRef, UserRefCollection } from './builtin/types/UserRef'
+export type {
+  CardCollection
+} from './builtin/types/Card'
 
 // Built-ins
 export { ExcelDataSource } from './builtin/data/ExcelDataSource'

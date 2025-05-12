@@ -13,6 +13,7 @@ import { Collection } from '../../util/database/Collection'
 import { ConsoleColour } from '../../util/debugger/Colour'
 import { Files } from '../../util/io/Files'
 import type { SimulatedDataPreset } from './SimulatedDataPresets'
+import { CollectionName } from '../types/CollectionName'
 
 /**
  * The **SimulatedCollection<T>()** class extends from {@link Collection}. It shares similar properties except the data is simulated locally.
@@ -27,7 +28,7 @@ export class SimulatedCollection<T extends DataType> extends Collection<
   private readonly simulatedContent: DMap<string, T[keyof T]>
 
   constructor(
-    name: string,
+    name: CollectionName,
     preset: SimulatedDataPreset<T>,
     instructor?: (simulated: DMap<string, T[keyof T]>) => void
   ) {

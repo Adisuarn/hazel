@@ -9,6 +9,7 @@ import { ReferableMapEntity } from '../data/ReferableEntity'
 import { ConsoleColour } from '../debugger/Colour'
 import { Debugger } from '../debugger/Debugger'
 import { Files } from '../io/Files'
+import { CollectionName } from 'lib/builtin/types/CollectionName'
 
 /**
  * @template T - A received collection type definition
@@ -22,7 +23,7 @@ export type CollectionMutator<T> = (d: T) => DataType
  * @group Abstracts
  */
 export abstract class Collection<T extends DataType, M = any, C = any> {
-  protected readonly name: string
+  protected readonly name: CollectionName
 
   protected debug = new Debugger(this.constructor.name || 'Collection')
 
@@ -40,7 +41,7 @@ export abstract class Collection<T extends DataType, M = any, C = any> {
    * @template M - A {@link CollectionMutator} received collection type definition.
    * @param name - The collection name.
    */
-  constructor(name: string) {
+  constructor(name: CollectionName) {
     this.name = name
     this.resourcePath = path.join(this.rootPath, `${this.name}.json`)
     this.dbInstance = this.initInstance(name)

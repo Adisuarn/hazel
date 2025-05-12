@@ -58,6 +58,7 @@ export class ReferableMapEntity<T extends DataType> {
    * @param value - Acceptable field value.
    */
   public set(value: T) {
+    this.saved = this.content
     this.content = value
     this.changes = value
     return this
