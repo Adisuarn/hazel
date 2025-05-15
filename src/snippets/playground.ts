@@ -1,16 +1,19 @@
-import { FirestoreCollection, Mutators, UserDataCollectionType } from '@lib'
-import type { Debugger, ClubDataCollection } from '@lib'
+import { FirestoreCollection, UserDataCollectionType } from '@lib'
+import type { Debugger } from '@lib'
 
 export const PlayGroundSnippet = async (debug: Debugger) => {
+    const stdColl = new FirestoreCollection<UserDataCollectionType>('data')
+      
+    const stdData = await stdColl.fetch()
+    if (!stdData) return
 
-  const stdCol = new FirestoreCollection<UserDataCollectionType>('data').setDefaultMutator(
-    Mutators.SpecificKeyFieldKVMutator((doc) => doc.get('student_id'))
-  )
-  const stdData = await stdCol.fetch()
+    let count = 0
+    stdData.map((k, v) => {
+      if (v.get("level") == "4" && v.get("student_id").length == 13) {
+        console.log(v.get("student_id"))
+        count += 1
+      }
+    })
 
-  if (!stdData) {
-    debug.err('No data found')
-    return
-  }
-
+    console.log(count)
 }

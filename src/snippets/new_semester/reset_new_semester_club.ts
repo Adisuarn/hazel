@@ -75,7 +75,7 @@ export const resetNewSemesterClub = async (debug: Debugger) => {
       || studentData.get("number") === "53"
       || studentData.get("title") === "ครู"
     ) return
-    
+  
     const std_present_club = studentData.get('club')
 
     //Move present club to old club

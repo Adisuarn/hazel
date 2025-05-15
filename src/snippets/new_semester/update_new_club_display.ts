@@ -1,9 +1,5 @@
-import { ClubDisplayCollection, ClubRecord, DMap, DMapUtil, FirestoreCollection, IDUtil, Mutators, UserDataCollectionType } from '@lib'
+import { ClubDisplayCollection, DMapUtil, FirestoreCollection, IDUtil, Mutators, UserDataCollectionType } from '@lib'
 import type { Debugger, ClubDataCollection, ClubDisplay } from '@lib'
-
-interface IClubDispaly extends ClubDisplay {
-  clubId: string
-}
 
 export const updateNewClubDisplay = async (debug: Debugger) => {
 
@@ -29,22 +25,23 @@ export const updateNewClubDisplay = async (debug: Debugger) => {
   }
 
   // Filter only accepted clubs
-  const acceptedClubId = clubData.map((k, v) => {
-    console.log(v.saved)
+  const acceptedClubId = [...new Set(clubData.map((k, v) => {
     if (v.get("status") !== "accepted") return 
     // @ts-ignore
     if (v.get("report") === true) return undefined
+    if (k.includes("_")) return k.split("_")[0]
     return k
-  }).filter((k) => k !== undefined)
+  }).filter((k) => k !== undefined))]
 
   if (!acceptedClubId) {
     debug.err('No accepted club data found')
     return
   }
 
+
   acceptedClubId.map((clubId) => {
+    if(!clubId) return
     // Get Pending Club Display
-    // if(index >= 1) return
     const clubDisplayPending = clubDisplayPendingData.map((k, v) => {
       if (k !== clubId) return
       return v.data()
@@ -71,6 +68,10 @@ export const updateNewClubDisplay = async (debug: Debugger) => {
 
     // Update club display status to empty
     clubData.map((k, v) => {
+      if (k.includes(clubId) && k.includes("_")) {
+        v.update("status", "")
+        return
+      }
       if (k !== clubId) return
       v.update("status", "")
     })

@@ -60,7 +60,7 @@
     "@types/readline-sync": "^1.4.4",
     "cli-spinner": "^0.2.10",
     "dotenv": "^16.0.3",
-    "exceljs": "^4.3.0",
+    "exceljs": "^4.4.0",
     "firebase-admin": "^11.5.0",
     "html-pdf": "^3.0.1",
     "node-object-hash": "^3.0.0",

@@ -1,1 +1,1 @@
-export type CollectionName = "cards" | "clubDisplay" | "clubDisplayPending" | "clubs" | "data" | "evaluate" | "users" | "tracker" | "track"
+export type CollectionName = "cards" | "clubDisplay" | "clubDisplayPending" | "clubs" | "data" | "evaluate" | "users" | "tracker" | "track" | "ref"

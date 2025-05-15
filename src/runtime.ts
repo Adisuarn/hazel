@@ -8,28 +8,31 @@ import { TeacherListsSnippet } from 'snippets/teacherList'
 import { CheckEvalFailSnippet } from 'snippets/checkEvalFail'
 import { PlayGroundSnippet } from 'snippets/playground'
 import { resetNewSemesterClub } from 'snippets/new_semester/reset_new_semester_club'
-import { checkCommittees } from 'snippets/new_semester/check_committees'
-import { checkMemberPercentage } from 'snippets/new_semester/member_percentage'
+import { checkCommittees } from 'snippets/check_committees'
+import { checkMemberPercentage } from 'snippets/member_percentage'
 import { EvalExcelGenSnippet } from 'snippets/evalGen'
 import { updateNewClubDisplay } from 'snippets/new_semester/update_new_club_display'
-import { generateCardCommittee } from 'snippets/new_semester/generate_card_committee'
+import { ResetAuditionField } from 'snippets/new_semester/reset_audition_field'
+import { UpdateNewM4 } from 'snippets/new_semester/update_new_m4'
+import { ClearEvaluate } from 'snippets/new_semester/clear_evaluate'
 
 enum SnippetMode {
     REPORTEXCEL = 1,
     STUDENTINFO = 2,
     REPORTPDF = 3,
     REPORTLOGS = 4,
-    CLEARPANEL = 5,
-    AUDITION = 6,
-    TEACHER_LIST = 7,
-    CHECK_EVAL_FAIL = 8,
-    GEN_EVAL_EXCEL = 9,
-    RESET_NEW_SEMESTER_CLUB = 10,
-    CHECK_COMMITTEES = 11,
-    CHECK_MEMBER_PERCENTAGE = 12,
-    PLAYGROUND = 13,
-    UPDATE_CLUB_DISPLAY = 14,
-    GENERATE_CARD_COMMITTEE = 15,
+    AUDITION = 5,
+    TEACHER_LIST = 6,
+    CHECK_EVAL_FAIL = 7,
+    GEN_EVAL_EXCEL = 8,
+    RESET_NEW_SEMESTER_CLUB = 9,
+    CHECK_COMMITTEES = 10,
+    CHECK_MEMBER_PERCENTAGE = 11,
+    UPDATE_CLUB_DISPLAY = 12,
+    UPDATE_NEW_M4 = 13,
+    RESET_AUDITION_FIELD = 14,
+    CLEAR_EVALUATE = 15,
+    PLAYGROUND = 16,
 }
 
 class Hazel {
@@ -98,8 +101,14 @@ class Hazel {
                 case SnippetMode.UPDATE_CLUB_DISPLAY:
                     runtime.runSnippet(updateNewClubDisplay)
                     break
-                case SnippetMode.GENERATE_CARD_COMMITTEE:
-                    runtime.runSnippet(generateCardCommittee)
+                case SnippetMode.UPDATE_NEW_M4:
+                    runtime.runSnippet(UpdateNewM4)
+                    break
+                case SnippetMode.RESET_AUDITION_FIELD:
+                    runtime.runSnippet(ResetAuditionField)
+                    break
+                case SnippetMode.CLEAR_EVALUATE:
+                    runtime.runSnippet(ClearEvaluate)
                     break
                 default:
                     console.log('Invalid mode')
