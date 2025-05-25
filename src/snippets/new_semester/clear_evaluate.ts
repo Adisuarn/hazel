@@ -16,6 +16,7 @@ export const ClearEvaluate = async (debug: Debugger) => {
     v.delete()
   })
 
-  DMapUtil.buildChanges(evalData, 'evaluate')
+  const evalChangeList = DMapUtil.buildChanges(evalData, 'evaluate')
+  //evalCol.pushChanges(evalChangeList, false)
 
 }

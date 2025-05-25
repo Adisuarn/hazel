@@ -122,4 +122,5 @@ export class ReferableMapEntity<T extends DataType> {
   public setSynthesized(syn: boolean): void {
     this.synthesized = syn
   }
+
 }

@@ -34,7 +34,7 @@ async function writeToExcel(data: any[], maxCommittees: number) {
   await workbook.xlsx.writeFile(filePath)
 }
 
-export const checkCommittees = async (debug: Debugger) => {
+export const getCommittees = async (debug: Debugger) => {
   const clubCol = new FirestoreCollection('clubs').setDefaultMutator(
     Mutators.SpecificKeyFieldKVMutator((doc) => doc.id)
   )
