@@ -22,6 +22,6 @@ export const ResetAuditionField = async (debug: Debugger) => {
     if (section && Object.keys(section).length > 0) v.update('section', {})
   })
 
-  const removeAuditionChangeList = DMapUtil.buildChanges(stdData, 'remove-audition')
+  const removeAuditionChangeList = DMapUtil.setFileName('remove-audition').buildChanges(stdData)
   //stdCol.pushChanges(removeAuditionChangeList, false)
 }

@@ -8,6 +8,7 @@ import type { ReferableMapEntity } from './ReferableEntity'
 export interface DataChanges {
   type: 'update' | 'delete' | 'create'
   _docID?: string
+  metadata?: Record<string, any>
   from: Partial<any>
   to: Partial<any>
 }
@@ -24,6 +25,12 @@ export interface ChangeList {
  */
 export class DMapUtil {
   private static debug = new Debugger('DMapUtil')
+  private static fileName?: string
+
+  public static setFileName(name: string) {
+    this.fileName = name
+    return this
+  }
 
   /**
    * The **buildChanges()** method generates preview, changes summary and {@link ChangeList}.
@@ -33,10 +40,15 @@ export class DMapUtil {
       | DMap<string, ReferableMapEntity<any>>
       | LiveDMap<string, ReferableMapEntity<any>>
       | ReferableMapEntity<any>[],
-    name?: string
   ): ChangeList {
-    const fname = `${new Date().getTime()+"-"+name}.json`
-    this.debug.info(`generating review file ${fname}`)
+
+    const fileName =
+      `${new Date().getTime()}_${DMapUtil.fileName}.json` ||
+      `${new Date().getTime()}.json`
+
+    DMapUtil.fileName = undefined
+
+    this.debug.info(`generating review file ${fileName}`)
 
     let changes
     let live = false
@@ -52,6 +64,7 @@ export class DMapUtil {
                 ? 'delete'
                 : 'update',
             _docID: v.document,
+            metadata: v.metadata,
             from: v.saved,
             to: v.document
               ? v.synthesized
@@ -79,6 +92,7 @@ export class DMapUtil {
                 ? 'delete'
                 : 'update',
             _docID: v.document,
+            metadata: v.metadata,
             from: v.saved,
             to: v.document
               ? v.synthesized
@@ -98,7 +112,7 @@ export class DMapUtil {
     )
 
     fs.writeFileSync(
-      `review/${process.env.RUNTIME_MODE}/${fname}`,
+      `review/${process.env.RUNTIME_MODE}/${fileName}`,
       JSON.stringify(changes, null, 4)
     )
 

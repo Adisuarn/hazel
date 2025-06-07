@@ -9,10 +9,6 @@ export const RemoveM6 = async (debug: Debugger) => {
   )
 
   const stdData = await stdCol.fetch()
-  if (!stdData) {
-    debug.err('No data found')
-    return
-  }
 
   const m6_db = stdData.findValues((v) => v.get('level') === '6')
 
@@ -40,7 +36,7 @@ export const RemoveM6 = async (debug: Debugger) => {
     v.delete()
   })
 
-  const M6ChangeList = DMapUtil.buildChanges(stdData, 'm6-clear')
+  const M6ChangeList = DMapUtil.setFileName('m6-clear').buildChanges(stdData)
   //stdCol.pushChanges(M6ChangeList, false)
 
 }

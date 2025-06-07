@@ -78,8 +78,8 @@ export const updateNewClubDisplay = async (debug: Debugger) => {
 
   })
 
-  const clubDisplayChangeList = DMapUtil.buildChanges(clubDisplayData, "clubDisplay")
-  const clubChangeList = DMapUtil.buildChanges(clubData, "clubs")
+  const clubDisplayChangeList = DMapUtil.setFileName('clubDisplay').buildChanges(clubDisplayData)
+  const clubChangeList = DMapUtil.setFileName('clubs').buildChanges(clubData)
 
   // clubDisplayCol.pushChanges(clubDisplayChangeList, false)
   // clubCol.pushChanges(clubChangeList, false)

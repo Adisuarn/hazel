@@ -1,38 +1,39 @@
-import { FirestoreCollection, IDUtil } from '@lib'
-import type { ClubDataCollection, Debugger, UserDataCollectionType } from '@lib'
+import { FirestoreCollection, IDUtil, ExcelDataSource, ReferableMapEntity, DMapUtil } from '@lib'
+import type { ClubDataCollection, Debugger, UserCredCollectionType, UserDataCollectionType, UserRefCollection } from '@lib'
+import path from 'path'
 
 export const PlayGroundSnippet = async (debug: Debugger) => {
-  const stdColl = new FirestoreCollection<UserDataCollectionType>('data')
-  const clubColl = new FirestoreCollection<ClubDataCollection>('clubs')
+  const refColl = new FirestoreCollection<UserRefCollection>('ref')
 
-  const [clubData, stdData] = await Promise.all([
-    clubColl.fetch(),
-    stdColl.fetch()
+  const [
+    refData,
+  ] = await Promise.all([
+    refColl.fetch(),
   ])
 
-  //@ts-ignore
-  const auClub = clubData.findValues((v) => v.get('audition') === true && v.get('report') !== true)
-  let clubs: string[] = []
+  const data = (await new ExcelDataSource(path.join(__dirname, 'newM4ID.xlsx')).resolve()).getSheet(0)?.getRecords()
 
-  auClub.map((club) => {
-    stdData.findValues((v) => {
-      const auditions = v.get('audition')
-      if (!auditions) return false
-      Object.keys(auditions).forEach((key) => {
-        if (auditions[club.document!] === "waiting") {
-          
-          if(!clubs.includes(club.document!)) clubs.push(club.document!)
-          return true
-        }
-        return false
-      })
-      return false
-    })
+  const stdID = data?.map((item) => {
+    return item["14"]! as string
   })
-  debug.table(clubs.map((club) => {
-    return {
-      clubName: IDUtil.translateToClubName(club),
-      clubId: club,
+
+  stdID?.map((id) => {
+    const student = refData.filter((k, v) => k.length > 5).findValues((v) => v.get('student_id') === id)[0]
+
+    if (!student) {
+      debug.err(`Student with ID ${id} not found in the reference data.`)
+      return
     }
-  }))
+
+    const original = student?.getOriginal()
+
+    student?.delete()
+
+    refData.insert(new ReferableMapEntity(original, original?.student_id).setMetadata({
+      reason: 'Change from hashed to student ID'
+    }))
+  })
+
+  const changes = DMapUtil.setFileName('update-ref-m4').buildChanges(refData)
+  // refColl.pushChanges(changes, false)
 }

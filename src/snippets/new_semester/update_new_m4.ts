@@ -1,4 +1,4 @@
-import { DMap, DMapUtil, FirestoreCollection, Mutators, ReferableMapEntity } from '@lib'
+import { DMapUtil, FirestoreCollection, ReferableMapEntity } from '@lib'
 import type { Debugger, UserRef, UserRefCollection } from '@lib'
 import path from 'path'
 import ExcelJS from 'exceljs'
@@ -29,7 +29,6 @@ export const UpdateNewM4 = async (debug: Debugger) => {
   worksheet?.eachRow({ includeEmpty: false }, (row, rowNumber) => {
     if (rowNumber > 1) {
       const student = {
-        identification: true,
         break: false,
         student_id: row.getCell('P').value?.toString() || '',
         firstname: row.getCell('E').value?.toString() || '',
@@ -47,6 +46,6 @@ export const UpdateNewM4 = async (debug: Debugger) => {
     refData.insert(new ReferableMapEntity(student))
   })
 
-  const newM4 = DMapUtil.buildChanges(refData, 'new-m4')
+  const newM4 = DMapUtil.setFileName('new-m4').buildChanges(refData)
   //refCol.pushChanges(newM4, false)
 }

@@ -14,6 +14,7 @@ export class ReferableMapEntity<T extends DataType> {
   public synthesized: boolean
   public document: string | undefined
   private content: T
+  public metadata: Record<string, any> = {}
   public saved: Partial<T> = {}
   public changes: Partial<T> = {}
   private alive = true
@@ -24,6 +25,12 @@ export class ReferableMapEntity<T extends DataType> {
     this.synthesized = true
     this.content = content
     this.document = document
+    this.metadata = {}
+  }
+
+  public setMetadata(data: Record<string, any>): this {
+    this.metadata = data
+    return this
   }
 
   /**

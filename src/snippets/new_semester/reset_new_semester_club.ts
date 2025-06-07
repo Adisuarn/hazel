@@ -1,5 +1,6 @@
 // there is an empty document in the collection. My error is that old_club is undefined please recheck this
 // this doc id seem like to have an problem c9SdViZIqZEsxqmn7vgs
+// Update cardID for committees
 
 import { FirestoreCollection, Mutators, DMapUtil, IDUtil  } from '@lib'
 import type { ClubData, Debugger } from '@lib'
@@ -88,8 +89,8 @@ export const resetNewSemesterClub = async (debug: Debugger) => {
 
   const clubChangeList = DMapUtil.buildChanges(clubData)
   const userChangeList = DMapUtil.buildChanges(userData)
+  
   // Push changes to Firestore
-
   // clubCol.pushChanges(clubChangeList)
   // userCol.pushChanges(userChangeList)
 }

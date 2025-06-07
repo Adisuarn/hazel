@@ -18,7 +18,7 @@ export const ResetCardID = async (debug: Debugger) => {
     v.update("cardID", "")
   })
 
-  const stdChangeList = DMapUtil.buildChanges(stdData, 'clear-cardID')
+  const stdChangeList = DMapUtil.setFileName('remove-cardID').buildChanges(stdData)
   //stdCol.pushChanges(stdChangeList, false)
 
 }

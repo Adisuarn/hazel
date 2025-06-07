@@ -2,7 +2,6 @@
  * @category Built-in
  */
 export interface UserRef {
-  identification?: boolean
   break: boolean
   firstname: string
   lastname: string

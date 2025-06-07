@@ -9,9 +9,6 @@ yarn.lock
 /review/
 /out/
 
-clublists.xlsx
-evals.xlsx
-TODO.txt
-src/snippets/m4_new.xlsx
-src/snippets/m5_new.xlsx
-src/snippets/m6_new.xlsx
+*.xlsx
+.DS_Store
+**/.DS_Store

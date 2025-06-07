@@ -14,6 +14,11 @@ import { ClearEvaluate } from 'snippets/new_semester/clear_evaluate'
 import { ResetCardID } from 'snippets/new_semester/reset_card_id'
 import { RemoveM6 } from 'snippets/new_semester/remove_m6'
 import { TempSnippet } from 'snippets/temp'
+import { ReservedSnippet } from 'snippets/new_semester/reserved'
+import { RandomClub } from 'snippets/new_semester/random_club'
+import { updateOldStd } from 'snippets/new_semester/update_old_std'
+import { updateM4Data } from 'snippets/new_semester/update_m4_data'
+import { studentList } from 'snippets/new_semester/student_list'
 
 enum SnippetMode {
     REPORTEXCEL = 1,
@@ -22,15 +27,20 @@ enum SnippetMode {
     REPORTLOGS = 4,
     GEN_EVAL_EXCEL = 5,
     GET_COMMITTEES = 6,
-    RESET_CARD_ID = 7,
-    RESET_AUDITION_FIELD = 8,
-    RESET_NEW_SEMESTER_CLUB = 9,
-    CLEAR_EVALUATE = 10,
-    UPDATE_CLUB_DISPLAY = 11,
-    REMOVE_M6 = 12,
+    REMOVE_M6 = 7,
+    RESET_CARD_ID = 8,
+    RESET_AUDITION_FIELD = 9,
+    RESET_NEW_SEMESTER_CLUB = 10,
+    CLEAR_EVALUATE = 11,
+    UPDATE_CLUB_DISPLAY = 12,
     UPDATE_NEW_M4 = 13,
-    PLAYGROUND = 14,
-    TEMP = 15
+    RESERVED = 14, 
+    UPDATE_M4_DATA = 15,
+    UPDATE_OLD_STD = 16,
+    RANDOM_CLUB = 17,
+    STUDENTLIST = 18,
+    PLAYGROUND = 19,
+    TEMP = 20,
 }
 
 class Hazel {
@@ -104,6 +114,21 @@ class Hazel {
                     break
                 case SnippetMode.TEMP:
                     runtime.runSnippet(TempSnippet)
+                    break
+                case SnippetMode.RESERVED:
+                    runtime.runSnippet(ReservedSnippet)
+                    break
+                case SnippetMode.RANDOM_CLUB:
+                    runtime.runSnippet(RandomClub)
+                    break
+                case SnippetMode.UPDATE_OLD_STD:
+                    runtime.runSnippet(updateOldStd)
+                    break
+                case SnippetMode.UPDATE_M4_DATA:
+                    runtime.runSnippet(updateM4Data)
+                    break
+                case SnippetMode.STUDENTLIST:
+                    runtime.runSnippet(studentList)
                     break
                 default:
                     console.log('Invalid mode')
