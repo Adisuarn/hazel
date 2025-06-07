@@ -33,6 +33,11 @@ export const pushDataSnippet = async (debug: Debugger) => {
     club: 'ก40000'
   }, '99999')
 
+  // Set metadata for the new student entity.
+  new_student.setMetadata({
+    reason: 'New student added',
+  })
+
   stdData.insert(new_student)
 
   // This is an example of how to delete a student entity.

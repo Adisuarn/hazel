@@ -1,4 +1,4 @@
-import type { Debugger, UserCredCollectionType, ClubDataCollection, UserDataCollectionType, ReferableMapEntity, IUserData } from "@lib";
+import type { Debugger, ClubDataCollection, UserDataCollectionType, ReferableMapEntity, IUserData } from "@lib";
 import { DMapUtil, FirestoreCollection, IDUtil, Workbook, Worksheet } from "@lib";
 
 export const RandomClub = async (debug: Debugger) => {
@@ -195,7 +195,7 @@ export const RandomClub = async (debug: Debugger) => {
   const stdChangeLists = DMapUtil.setFileName('random-students').buildChanges(stdData)
   const clubChangeLists = DMapUtil.setFileName('random-students-club').buildChanges(clubData);
 
-  dataColl.pushChanges(stdChangeLists, false)
-  clubColl.pushChanges(clubChangeLists, false);
+  // dataColl.pushChanges(stdChangeLists, false)
+  // clubColl.pushChanges(clubChangeLists, false);
 
 }

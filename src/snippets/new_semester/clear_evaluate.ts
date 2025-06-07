@@ -7,16 +7,15 @@ export const ClearEvaluate = async (debug: Debugger) => {
   )
 
   const evalData = await evalCol.readFromCache(true)
+
   if(!evalData) {
     debug.err("Failed to read evaluate data from cache")
     return
   }
 
-  evalData.map((k, v) => {
-    v.delete()
-  })
+  evalData.iterateSync((k, v) => v.delete())
 
-  const evalChangeList = DMapUtil.setFileName('evaluate').buildChanges(evalData)
-  //evalCol.pushChanges(evalChangeList, false)  
+  const changes = DMapUtil.setFileName('clear-evaluate').buildChanges(evalData)
+  //evalCol.pushChanges(changes, false)  
 
 }
