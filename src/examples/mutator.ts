@@ -1,7 +1,7 @@
 import type { Debugger, UserDataCollectionType } from '../lib'
 import { FirestoreCollection, IDUtil, Mutators } from '../lib'
 
-const mutatorExampleSnippet = async (debug: Debugger) => {
+export const mutatorExampleSnippet = async (debug: Debugger) => {
   /*
   This example demonstrates the usage of mutator.
   By accessing users' data and perform a basic query.
