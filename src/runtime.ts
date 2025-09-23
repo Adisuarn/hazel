@@ -25,6 +25,7 @@ import { basicExcel } from 'examples/basicExcel'
 import { docGenSnippet } from 'examples/docGen'
 import { mutatorExampleSnippet } from 'examples/mutator'
 import { pushDataSnippet } from 'examples/pushData'
+import { header, colorize, Colors, prompt, warning, success, info, error as errorColor } from 'lib/util/cli-colors'
 
 enum ProdSnippetMode {
     REPORTEXCEL = 1,
@@ -92,14 +93,13 @@ class Hazel {
 
     private displayHeader(text: string): void {
         const separator = '='.repeat(text.length + 4);
-        const { header, info } = require('./utils/cli-colors');
+        const { header, info } = require('./lib/util/cli-colors');
         console.log(`\n${info(separator)}`);
         console.log(`${header(`| ${text} |`)}`);
         console.log(`${info(separator)}\n`);
     }
 
     private displayAvailableModes(snippetMode: any): void {
-        const { info, colorize, Colors } = require('./utils/cli-colors');
         Object.entries(snippetMode)
             .filter(([key]) => isNaN(Number(key)))
             .sort((a, b) => Number(a[1]) - Number(b[1]))
@@ -123,7 +123,6 @@ class Hazel {
 
         try {
             this.displayHeader('Hazel Runtime CLI');
-            const { prompt, warning } = require('./utils/cli-colors');
 
             const runtimeType = (await question(prompt('Choose runtime (DEV/PROD), HELP or Q to quit: '))).trim().toUpperCase() as RuntimeType | 'HELP';
 
@@ -164,8 +163,6 @@ class Hazel {
             const modeName = Object.entries(snippetMode)
                 .find(([_, value]) => value === modeType)?.[0] || `Mode ${modeType}`;
 
-            const { success, info } = require('./utils/cli-colors');
-
             console.log(`\n${info(`Starting ${runtimeType} runtime with mode: ${modeName}`)}\n`);
             const runtime = new Runtime(runtimeType);
             const snippet = snippetMap[modeType];
@@ -182,7 +179,6 @@ class Hazel {
             }
         } catch (err) {
             const error = err as Error;
-            const { error: errorColor } = require('./utils/cli-colors');
             console.error(`\n${errorColor('Error:')} ${error.message || 'An unknown error occurred'}`);
         } finally {
             readline.close();
@@ -194,7 +190,6 @@ class Hazel {
     }
 
     private displayHelp(): void {
-        const { info, success, colorize, Colors } = require('./utils/cli-colors');
         this.displayHeader('Hazel CLI Help');
 
         console.log(colorize('Commands:', Colors.Bright));
@@ -212,7 +207,6 @@ class Hazel {
     }
 
     onClose(): void {
-        const { info } = require('./utils/cli-colors');
         console.log(`\n${info('Ending Hazel Runtime CLI...')}`);
     }
 
@@ -222,7 +216,6 @@ class Hazel {
             output: process.stdout
         });
 
-        const { prompt } = require('./utils/cli-colors');
         const suffix = defaultYes ? '[Y/n]' : '[y/N]';
 
         return new Promise((resolve) => {
@@ -240,7 +233,7 @@ class Hazel {
     }
 }
 
-const app = new Hazel();
+new Hazel();
 
 process.on('SIGINT', () => {
     console.log('\nProcess terminated by user.');

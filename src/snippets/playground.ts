@@ -1,39 +1,42 @@
-import { FirestoreCollection, IDUtil, ExcelDataSource, ReferableMapEntity, DMapUtil } from '@lib'
+import { FirestoreCollection, ReferableMapEntity, DMapUtil, DMap, Workbook, Worksheet, IDUtil, Mutators, EvaluateCollectionType, ClubRecord } from '@lib'
 import type { ClubDataCollection, Debugger, UserCredCollectionType, UserDataCollectionType, UserRefCollection } from '@lib'
-import path from 'path'
 
 export const PlayGroundSnippet = async (debug: Debugger) => {
-  const refColl = new FirestoreCollection<UserRefCollection>('ref')
-
-  const [
-    refData,
-  ] = await Promise.all([
-    refColl.fetch(),
-  ])
-
-  const data = (await new ExcelDataSource(path.join(__dirname, 'newM4ID.xlsx')).resolve()).getSheet(0)?.getRecords()
-
-  const stdID = data?.map((item) => {
-    return item["14"]! as string
-  })
-
-  stdID?.map((id) => {
-    const student = refData.filter((k, v) => k.length > 5).findValues((v) => v.get('student_id') === id)[0]
-
-    if (!student) {
-      debug.err(`Student with ID ${id} not found in the reference data.`)
-      return
-    }
-
-    const original = student?.getOriginal()
-
-    student?.delete()
-
-    refData.insert(new ReferableMapEntity(original, original?.student_id).setMetadata({
-      reason: 'Change from hashed to student ID'
-    }))
-  })
-
-  const changes = DMapUtil.setFileName('update-ref-m4').buildChanges(refData)
-  // refColl.pushChanges(changes, false)
+	const evalCol = new FirestoreCollection<EvaluateCollectionType>('evaluate')
+	const clubCol = new FirestoreCollection<ClubDataCollection>('clubs')
+	const evalData = await evalCol.readFromCacheNoRef(true)
+	const clubData = await clubCol.readFromCache(true)
+  
+	if (!evalData || !clubData) {
+		debug.err('No eval or club data found')
+		return
+	}
+  
+	//@ts-ignore
+	const filteredClub = clubData.filter((k, v) => v.get('report') !== true)
+	let clubID: string[] = []
+  
+	clubID.push(...filteredClub.map((id) => id))
+  
+	const notEvaluted: {
+		'รหัสชมรม': string,
+		'ชื่อชมรม': string,
+	}[] = []
+  
+	const evaluted: string[] = evalData.map((k, v) => k)
+	
+	clubID.forEach((id) => {
+		if(!evaluted.includes(id)) {
+			notEvaluted.push({
+				'รหัสชมรม': id,
+				'ชื่อชมรม': IDUtil.translateToClubName(id)
+			})
+		}
+		return;
+	})
+	
+	debug.table(notEvaluted)
+	const ws = new Worksheet(notEvaluted).setName('Not Evaluated Clubs')
+	const wb = new Workbook([ws])
+	await wb.save('not_evaluated_clubs.xlsx')
 }
